@@ -59,7 +59,6 @@ class User(Model):
 
 class Todo(Model):
     name= CharField()
-    done= BooleanField(default=False)
 
     class Meta:
         database = DATABASE
