@@ -35,7 +35,7 @@ class TodosList(Resource):
     def get(self):
         todos = [marshal(todo, todos_fields)
                 for todo in models.Todo.select()]
-        return {'todos': todos}
+        return todos
 
     @marshal_with(todos_fields)
     def post(self):
@@ -59,19 +59,25 @@ class Todo(Resource):
 
     @marshal_with(todos_fields)
     def get(self, id):
+        """ Get a given TODO """
         return todo_or_404(id)
 
     @marshal_with(todos_fields)
     def put(self, id):
+        """ Editting of posted TODOS"""
         args = self.reqparse.parse_args()
-        query = models.Todo.update(**args.where(models.Todo.id==id))
+        query = models.Todo.update(**args).where(models.Todo.id==id)
         query.execute()
         return (models.Todo.get(models.Todo.id==id), 200,
                 {'location': url_for('resources.todos.todo', id=id)})
 
     def delete(self, id):
-        query = models.Todo.delete(**args.where(models.Todo.id==id))
-        query.execute()
+        """ Delete a specific TODO"""
+        try:
+            todo =  models.Todo.select().where(models.Todo.id==id).get()
+        except models.Todo.DoesNotExist:
+            abort(404)
+        todo.delete_instance()
         return ('', 204, {'location': url_for('resources.todos.todos')})
 
 

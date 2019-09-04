@@ -58,7 +58,7 @@ class User(Model):
 
 
 class Todo(Model):
-    name= CharField()
+    name = CharField()
 
     class Meta:
         database = DATABASE

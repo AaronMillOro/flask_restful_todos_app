@@ -7,9 +7,9 @@ from resources.todos import todos_api
 app = Flask(__name__)
 app.register_blueprint(todos_api, url_prefix='/api/v1')
 
-@app.route('/api/v1/todos/', methods=['GET'])
+@app.route('/')
 def my_todos():
-    return jsonify({'todos': todos})
+    return render_template('index.html')
 
 if __name__ == '__main__':
     models.initialize()
