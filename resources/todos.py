@@ -1,7 +1,6 @@
-from flask import jsonify, Blueprint, abort
+from flask import Blueprint, abort
 
-from flask_restful import (Resource, Api, reqparse,
-                           inputs, fields, marshal,
+from flask_restful import (Resource, Api, reqparse, fields, marshal,
                            marshal_with, url_for)
 
 import models
@@ -10,6 +9,7 @@ todos_fields = {
     'id': fields.Integer,
     'name': fields.String
 }
+
 
 def todo_or_404(todo_id):
     """ Function to handle 404 error """
@@ -33,8 +33,7 @@ class TodosList(Resource):
         super().__init__()
 
     def get(self):
-        todos = [marshal(todo, todos_fields)
-                for todo in models.Todo.select()]
+        todos = [marshal(todo, todos_fields) for todo in models.Todo.select()]
         return todos
 
     @marshal_with(todos_fields)
@@ -42,8 +41,7 @@ class TodosList(Resource):
         args = self.reqparse.parse_args()
         todo = models.Todo.create(**args)
         return (todo, 201, {
-                'location': url_for('resources.todos.todo', id=todo.id)}
-               )
+                'location': url_for('resources.todos.todo', id=todo.id)})
 
 
 class Todo(Resource):
@@ -66,15 +64,15 @@ class Todo(Resource):
     def put(self, id):
         """ Editting of posted TODOS"""
         args = self.reqparse.parse_args()
-        query = models.Todo.update(**args).where(models.Todo.id==id)
+        query = models.Todo.update(**args).where(models.Todo.id == id)
         query.execute()
-        return (models.Todo.get(models.Todo.id==id), 200,
+        return (models.Todo.get(models.Todo.id == id), 200,
                 {'location': url_for('resources.todos.todo', id=id)})
 
     def delete(self, id):
         """ Delete a specific TODO"""
         try:
-            todo =  models.Todo.select().where(models.Todo.id==id).get()
+            todo = models.Todo.select().where(models.Todo.id == id).get()
         except models.Todo.DoesNotExist:
             abort(404)
         todo.delete_instance()
@@ -83,13 +81,5 @@ class Todo(Resource):
 
 todos_api = Blueprint('resources.todos', __name__)
 api = Api(todos_api)
-api.add_resource(
-    TodosList,
-    '/todos',
-    endpoint='todos'
-)
-api.add_resource(
-    Todo,
-    '/todos/<int:id>',
-    endpoint = 'todo'
-)
+api.add_resource(TodosList, '/todos', endpoint='todos')
+api.add_resource(Todo, '/todos/<int:id>', endpoint='todo')
