@@ -40,4 +40,7 @@ The aim of this project was to **provide a back-end** solution for a client-side
 		http://localhost:8000/
 
 
+![Figure display](https://github.com/AaronMillOro/flask_restful_todos_app/blob/master/mock/Screenshot.png)
+
+
 Enjoy! :shipit:
