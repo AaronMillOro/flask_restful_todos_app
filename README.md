@@ -18,7 +18,10 @@ The aim of this project was to **provide a back-end** solution for a client-side
 
 * When a previously saved Todo is deleted and the save link is double-clicked, it will make a **DELETE request** to the server. 
 
-* Unit tests were written to test views is displaying the correct information and that models, classes, and other functions behave as expected.
+* Unit tests were written to verify that models, classes, and other functions behave as expected. The tests coverage (90%) was achieved typing:
+
+		coverage run --source='.' test_api.py
+		coverage report
 
 * PEP8 style was verified using the utility **flake8**
 
